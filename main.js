@@ -4,45 +4,41 @@ const FULL_HEART = '♥'
 
 // Your JavaScript code goes here!
 
-const emptyHeart = document.querySelectorAll('.like-glyph');
+const heart = document.querySelectorAll('.like-glyph');
 const modal = document.getElementById('modal');
 const modalMessage = document.getElementById('modal-message');
 
-emptyHeart.forEach((heart) => {
-  heart.addEventListener('click', (event) => {
+for (let i = 0; i <heart.length; i++) {
+  heart[i].addEventListener('click', () => {
     mimicServerCall()
-      .then((response) => {
-        console.log(response);
-        console.log(Promise.PromiseState);  // Trying to see if the Promise can NOT throw an Error but also NOT be Successful.
-        // console.log(Promise.reject(response));
-        fillHeart();
-        // if(Promise.PromiseState == "Fulfilled" || Promise.PromiseState == "resolve"){
-        //   fillHeart();
-        //   console.log("filling heart");
-        // } else {
-        //   console.log("not filling heart");
-        // }
+      .then(() => {
+        if (heart[i].classList.contains('activated-heart') === false) {
+          heart[i].classList.add('activated-heart');
+          heart[i].textContent = FULL_HEART;
+          // alert("Yes... Feed our algorithm! *evil laugh*");
+        } else if (heart[i].classList.contains('activated-heart') === true) {
+          heart[i].classList.remove('activated-heart');
+          heart[i].textContent = EMPTY_HEART;
+        }
       })
       .catch((error) => {
         console.error(error);
-        modal.style.visibility = "visible";
-        modalMessage.textContent = error;
-        setTimeout(hideModal, 3000);
+        showModal(error);
       })
   })
-})
-
-const hideModal = () => {
-  modal.style.visibility = "hidden";
 }
+
+const showModal = (error) => {
+  modal.style.visibility = "visible";
+  modalMessage.textContent = error;
+  setTimeout(hideModal, 3000);
+}
+const hideModal = () => modal.style.visibility = "hidden";
 
 const fillHeart = (e) => {
   console.log("filling heart");
-  emptyHeart.innerHTML = FULL_HEART;
+  heart.innerHTML = FULL_HEART;
 }
-
-
-// listItem.parentNode.replaceChild(newItem, listItem);
 
 //------------------------------------------------------------------------------
 // Don't change the code below: this function mocks the server response
